@@ -73,7 +73,9 @@
     <Content Include="css\bootstrap.css.map" />
     <Content Include="css\bootstrap.min.css.map" />
     <Content Include="images\add.png" />
+    <Content Include="images\available.png" />
     <Content Include="images\edit.png" />
+    <Content Include="images\unavailable.png" />
     <Content Include="js\bootstrap.bundle.js.map" />
     <Content Include="js\bootstrap.bundle.min.js.map" />
     <Content Include="js\bootstrap.js.map" />

@@ -12,5 +12,6 @@ namespace GridViewOnSteroids.Model
         public decimal Price{ get; set; }
         public string Country{ get; set; }
         public Boolean Availability { get; set; }
+        public int InStock { get; set; }
     }
 }

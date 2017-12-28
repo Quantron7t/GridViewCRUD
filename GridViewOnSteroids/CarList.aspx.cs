@@ -63,7 +63,7 @@ namespace GridViewOnSteroids
         {
             int id = Int32.Parse(CarGridView.DataKeys[e.NewSelectedIndex].Value.ToString());
             string connectionString = "Data Source=(local);Initial Catalog=Demo;Integrated Security=True";
-            string query = "Select name,type,price,countryoforigin from Cars where id=@ID";
+            string query = "Select name,type,price,countryoforigin,availability,instock from Cars where id=@ID";
             Car car = new Car();
             car = GetCar(connectionString, query, id);
             if (car != null)
@@ -72,6 +72,17 @@ namespace GridViewOnSteroids
                 carTypeLabel.Text = car.Type;
                 carPriceLabel.Text = car.Price.ToString("C2", CultureInfo.CreateSpecificCulture("fr-FR"));
                 carCountryLabel.Text = car.Country;
+                carInStockLabel.Text = car.InStock.ToString();
+                if (car.Availability)
+                {
+                    selectAvailabilityImage.ImageUrl = "~/images/available.png";
+                    selectAvailabilityImage.ToolTip = "Car available";
+                }
+                else
+                {
+                    selectAvailabilityImage.ImageUrl = "~/images/unavailable.png";
+                    selectAvailabilityImage.ToolTip = "Car unavailable";
+                }
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "SelectCarModal", "openSelectedCar();", true);
             }
         }
@@ -83,7 +94,7 @@ namespace GridViewOnSteroids
                 int id = Int32.Parse(CarGridView.DataKeys[Int32.Parse(e.CommandArgument.ToString())].Value.ToString());
                 UpdateButton.CommandArgument = id.ToString();
                 string connectionString = "Data Source=(local);Initial Catalog=Demo;Integrated Security=True";
-                string query = "Select name,type,price,countryoforigin,availability from Cars where id=@ID";
+                string query = "Select name,type,price,countryoforigin,availability,instock from Cars where id=@ID";
                 Car car = new Car();
                 car = GetCar(connectionString, query, id);
 
@@ -94,6 +105,7 @@ namespace GridViewOnSteroids
                     updatePriceTextBox.Text = car.Price.ToString();
                     updateCountryTextBox.Text = car.Country.ToString();
                     updateAvailableCheckBox.Checked = car.Availability;
+                    updateInStockTextBox.Text = car.InStock.ToString();
                     ScriptManager.RegisterStartupScript(this, this.GetType(), "EditCarModal", "editCar();", true);
                 }        
             }
@@ -118,6 +130,7 @@ namespace GridViewOnSteroids
                         car.Price = Convert.ToDecimal(sqlDataReader[2]);
                         car.Country = sqlDataReader[3].ToString();
                         car.Availability = Convert.ToBoolean(sqlDataReader[4]);
+                        car.InStock = Convert.ToInt32(sqlDataReader[5]);
                     }
                     return car;
                 }               
@@ -128,15 +141,16 @@ namespace GridViewOnSteroids
         protected void UpdateButton_Click(object sender, EventArgs e)
         {
             string connectionString = "Data Source=(local);Initial Catalog=Demo;Integrated Security=True";
-            string query = "Update Cars set price=@CarPrice,type=@CarType,countryoforigin=@CarCountry,availability=@available where id=@ID";
+            string query = "Update Cars set price=@CarPrice,type=@CarType,countryoforigin=@CarCountry,availability=@Available,instock=@InStock where id=@ID";
             var id = ((Button)sender).CommandArgument;
             string price, type, country;
-            bool available; 
+            bool available;
+            int inStock;
             type = updateTypeTextBox.Text;
             price = updatePriceTextBox.Text;
             country = updateCountryTextBox.Text;
             available = updateAvailableCheckBox.Checked;
-
+            inStock = Convert.ToInt32(updateInStockTextBox.Text);
             try
             {
                 using (SqlConnection sqlConnection = new SqlConnection(connectionString))
@@ -147,7 +161,8 @@ namespace GridViewOnSteroids
                     sqlCommand.Parameters.AddWithValue("@CarType", type);
                     sqlCommand.Parameters.AddWithValue("@CarPrice", price);
                     sqlCommand.Parameters.AddWithValue("@CarCountry", country);
-                    sqlCommand.Parameters.AddWithValue("@available", available);
+                    sqlCommand.Parameters.AddWithValue("@Available", available);
+                    sqlCommand.Parameters.AddWithValue("@InStock", inStock);
                     sqlCommand.ExecuteNonQuery();
                 }
             }
@@ -161,12 +176,16 @@ namespace GridViewOnSteroids
         protected void AddButton_Click(object sender, EventArgs e)
         {
             string connectionString = "Data Source=(local);Initial Catalog=Demo;Integrated Security=True";
-            string query = "Insert into Cars values (@CarName,@CarType,@CarPrice,@CarCountry)";
+            string query = "Insert into Cars values (@CarName,@CarType,@CarPrice,@CarCountry,@Availability,@Instock)";
             string name,price, type, country;
+            bool available;
+            int instock;
             name = addCarNameTextBox.Text;
             type = addCarTypeTextBox.Text;
             price = addCarPriceTextBox.Text;
             country = addCarCountryTextBox.Text;
+            available = addCarAvailableCheckBox.Checked;
+            instock = Convert.ToInt32(addCarInStockTextBox.Text);
             using (SqlConnection sqlConnection = new SqlConnection(connectionString))
             {
                 sqlConnection.Open();
@@ -175,6 +194,8 @@ namespace GridViewOnSteroids
                 sqlCommand.Parameters.AddWithValue("@CarType", type);
                 sqlCommand.Parameters.AddWithValue("@CarPrice", price);
                 sqlCommand.Parameters.AddWithValue("@CarCountry", country);
+                sqlCommand.Parameters.AddWithValue("@Availability", available);
+                sqlCommand.Parameters.AddWithValue("@Instock", instock);
                 sqlCommand.ExecuteNonQuery();
             }
             LoadCarList();

@@ -49,6 +49,15 @@ namespace GridViewOnSteroids {
         protected global::System.Web.UI.WebControls.Label carNameLabel;
         
         /// <summary>
+        /// selectAvailabilityImage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image selectAvailabilityImage;
+        
+        /// <summary>
         /// carTypeLabel control.
         /// </summary>
         /// <remarks>
@@ -56,6 +65,15 @@ namespace GridViewOnSteroids {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label carTypeLabel;
+        
+        /// <summary>
+        /// carInStockLabel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label carInStockLabel;
         
         /// <summary>
         /// carPriceLabel control.
@@ -121,6 +139,15 @@ namespace GridViewOnSteroids {
         protected global::System.Web.UI.WebControls.TextBox updateCountryTextBox;
         
         /// <summary>
+        /// updateInStockTextBox control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox updateInStockTextBox;
+        
+        /// <summary>
         /// UpdateButton control.
         /// </summary>
         /// <remarks>
@@ -128,6 +155,15 @@ namespace GridViewOnSteroids {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button UpdateButton;
+        
+        /// <summary>
+        /// addCarAvailableCheckBox control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox addCarAvailableCheckBox;
         
         /// <summary>
         /// addCarNameTextBox control.
@@ -164,6 +200,15 @@ namespace GridViewOnSteroids {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox addCarCountryTextBox;
+        
+        /// <summary>
+        /// addCarInStockTextBox control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox addCarInStockTextBox;
         
         /// <summary>
         /// AddButton control.
