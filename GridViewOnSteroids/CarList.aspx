@@ -30,9 +30,13 @@
             </div>
             <asp:GridView CssClass="table table-striped" runat="server" HeaderStyle-BackColor="#0066cc" ID="CarGridView" OnSelectedIndexChanging="CarGridView_SelectedIndexChanging" DataKeyNames="id" OnRowDataBound="CarGridView_RowDataBound" OnRowDeleting="CarGridView_RowDeleting" OnRowCommand="CarGridView_RowCommand" AutoGenerateColumns="False">
                 <Columns>
-                    <asp:BoundField DataField="id" />                                      
+                    <asp:BoundField DataField="id" />               
+                    <asp:TemplateField HeaderText="Available">
+                        <ItemTemplate>
+                            <asp:CheckBox runat="server" ID="CheckBox" Checked='<%# Eval("availability") %>' AutoPostBack="true" OnCheckedChanged="CheckBox_CheckedChanged"/>                           <as
+                        </ItemTemplate>
+                    </asp:TemplateField>
                     <asp:BoundField DataField="name" HeaderText="Car"/>
-                    <asp:BoundField DataField="type" HeaderText="Class" />
                     <asp:TemplateField ShowHeader="False" HeaderStyle-Width="85" HeaderText="Actions">
                         <ItemTemplate> 
                             <asp:LinkButton runat="server" CommandName="Select" ToolTip="View More Info" CausesValidation="False" ID="LinkButton1">
@@ -96,16 +100,20 @@
               <div class="modal-body">
                 <p class="bg-info"><em>&nbsp;You are editing : <b><asp:Label runat="server" ID="updateCarNameLabel"></asp:Label></b></em></p>
                 <div class="input-group">
-                    <span class="input-group-addon" style="width:85px"><b>Type</b></span>  
-                    <asp:TextBox runat="server" ID="updateTypeTextBox" CssClass="form-control" placeholder="Class of Car"></asp:TextBox>
+                    <span class="input-group-addon" style="width:108px"><b>Availablility</b></span>  
+                    <asp:Checkbox runat="server" ID="updateAvailableCheckBox" CssClass="form-control"></asp:Checkbox>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon" style="width:108px"><b>Type</b></span>  
+                    <asp:TextBox runat="server" ID="updateTypeTextBox" CssClass="form-control" AutoComplete="false" placeholder="Class of Car"></asp:TextBox>
                 </div>
                  <div class="input-group">
-                    <span class="input-group-addon" style="width:85px"><b>Cost</b></span>                    
-                    <asp:TextBox runat="server" ID="updatePriceTextBox"  CssClass="form-control" placeholder="Cost of Car" min="1" MaxLength="10000000" TextMode="Number"></asp:TextBox> 
+                    <span class="input-group-addon" style="width:108px"><b>Cost</b></span>                    
+                    <asp:TextBox runat="server" ID="updatePriceTextBox"  CssClass="form-control" AutoComplete="false" placeholder="Cost of Car" min="1" MaxLength="10000000" TextMode="Number"></asp:TextBox> 
                   </div>
                   <div class="input-group">
-                    <span class="input-group-addon" style="width:85px"><b>Country</b></span>                    
-                    <asp:TextBox runat="server" ID="updateCountryTextBox"  CssClass="form-control" placeholder="Country of Origin"></asp:TextBox>
+                    <span class="input-group-addon" style="width:108px"><b>Country</b></span>                    
+                    <asp:TextBox runat="server" ID="updateCountryTextBox"  CssClass="form-control" AutoComplete="false" placeholder="Country of Origin"></asp:TextBox>
                   </div>
               </div>
               <div class="modal-footer">

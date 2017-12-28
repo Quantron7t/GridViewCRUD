@@ -21,7 +21,7 @@ namespace GridViewOnSteroids
         private void LoadCarList()
         {
             string connectionString = "Data Source=(local);Initial Catalog=Demo;Integrated Security=True";
-            string query = "Select id,name,type from Cars";
+            string query = "Select id,name,availability from Cars";
 
             CarGridView.DataSource = GetData(connectionString,query);
             CarGridView.DataBind();            
@@ -83,7 +83,7 @@ namespace GridViewOnSteroids
                 int id = Int32.Parse(CarGridView.DataKeys[Int32.Parse(e.CommandArgument.ToString())].Value.ToString());
                 UpdateButton.CommandArgument = id.ToString();
                 string connectionString = "Data Source=(local);Initial Catalog=Demo;Integrated Security=True";
-                string query = "Select name,type,price,countryoforigin from Cars where id=@ID";
+                string query = "Select name,type,price,countryoforigin,availability from Cars where id=@ID";
                 Car car = new Car();
                 car = GetCar(connectionString, query, id);
 
@@ -93,6 +93,7 @@ namespace GridViewOnSteroids
                     updateTypeTextBox.Text = car.Type;
                     updatePriceTextBox.Text = car.Price.ToString();
                     updateCountryTextBox.Text = car.Country.ToString();
+                    updateAvailableCheckBox.Checked = car.Availability;
                     ScriptManager.RegisterStartupScript(this, this.GetType(), "EditCarModal", "editCar();", true);
                 }        
             }
@@ -116,6 +117,7 @@ namespace GridViewOnSteroids
                         car.Type = sqlDataReader[1].ToString();
                         car.Price = Convert.ToDecimal(sqlDataReader[2]);
                         car.Country = sqlDataReader[3].ToString();
+                        car.Availability = Convert.ToBoolean(sqlDataReader[4]);
                     }
                     return car;
                 }               
@@ -126,12 +128,14 @@ namespace GridViewOnSteroids
         protected void UpdateButton_Click(object sender, EventArgs e)
         {
             string connectionString = "Data Source=(local);Initial Catalog=Demo;Integrated Security=True";
-            string query = "Update Cars set price=@CarPrice,type=@CarType,countryoforigin=@CarCountry where id=@ID";
+            string query = "Update Cars set price=@CarPrice,type=@CarType,countryoforigin=@CarCountry,availability=@available where id=@ID";
             var id = ((Button)sender).CommandArgument;
             string price, type, country;
+            bool available; 
             type = updateTypeTextBox.Text;
             price = updatePriceTextBox.Text;
             country = updateCountryTextBox.Text;
+            available = updateAvailableCheckBox.Checked;
 
             try
             {
@@ -143,6 +147,7 @@ namespace GridViewOnSteroids
                     sqlCommand.Parameters.AddWithValue("@CarType", type);
                     sqlCommand.Parameters.AddWithValue("@CarPrice", price);
                     sqlCommand.Parameters.AddWithValue("@CarCountry", country);
+                    sqlCommand.Parameters.AddWithValue("@available", available);
                     sqlCommand.ExecuteNonQuery();
                 }
             }
@@ -178,6 +183,39 @@ namespace GridViewOnSteroids
         protected void AddWindowPopupButton_Click(object sender, EventArgs e)
         {
             ScriptManager.RegisterStartupScript(this, this.GetType(), "AddCarModalOpener", "addCar();", true);
+        }
+
+        protected void CheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            //ScriptManager.RegisterStartupScript(this,this.GetType(),"checkboxscript","alert('Fired')",true);
+            foreach (GridViewRow row in CarGridView.Rows)
+            {
+                int id = Convert.ToInt32(CarGridView.DataKeys[row.RowIndex].Value);
+                CheckBox chk = (CheckBox)row.FindControl("CheckBox");
+                if (chk.Checked)
+                {
+                    updateAvailability(id, true);
+                }
+                else
+                {
+                    updateAvailability(id, false);
+                }
+            }
+        }
+
+        private void updateAvailability(int id, bool v)
+        {
+            string connectionString = "Data Source=(local);Initial Catalog=Demo;Integrated Security=true";
+            string query = "update Cars set availability=@available where id=@ID;";
+
+            using (SqlConnection sqlConnection= new SqlConnection(connectionString))
+            {
+                sqlConnection.Open();
+                SqlCommand sqlCommand = new SqlCommand(query,sqlConnection);
+                sqlCommand.Parameters.AddWithValue("@available",v);
+                sqlCommand.Parameters.AddWithValue("@ID", id);
+                sqlCommand.ExecuteNonQuery();
+            }
         }
     }
 }
